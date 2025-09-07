@@ -32,7 +32,9 @@ function set_wallpaper() {
     fi
 
     if [ -n "$(pgrep -u "$USER" xfce4-session)" ]; then
-        xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "$1"
+        for prop in $(xfconf-query -c xfce4-desktop -l | grep last-image); do
+            xfconf-query -c xfce4-desktop -p "$prop" -t string -s "$1"
+        done
         echo "Set wallpaper for XFCE"
         return 0
     fi
