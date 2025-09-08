@@ -14,20 +14,17 @@ function set_wallpaper() {
     if [ -n "$(pgrep -u "$USER" gnome-shell)" ]; then
         gsettings set org.gnome.desktop.background picture-uri "file://$1"
         gsettings set org.gnome.desktop.background picture-options 'zoom'
-        echo "Set wallpaper for GNOME"
         return 0
     fi
 
     if [ -n "$(pgrep -u "$USER" cinnamon)" ]; then
         gsettings set org.cinnamon.desktop.background picture-uri "file://$1"
         gsettings set org.cinnamon.desktop.background picture-options 'zoom'
-        echo "Set wallpaper for Cinnamon"
         return 0
     fi
 
     if [ -n "$(pgrep -u "$USER" mate-session)" ]; then
         gsettings set org.mate.background picture-filename "$1"
-        echo "Set wallpaper for MATE"
         return 0
     fi
 
@@ -35,14 +32,12 @@ function set_wallpaper() {
         for prop in $(xfconf-query -c xfce4-desktop -l | grep last-image); do
             xfconf-query -c xfce4-desktop -p "$prop" -t string -s "$1"
         done
-        echo "Set wallpaper for XFCE"
         return 0
     fi
 
 #hi so if any window manager does not exist, feh comes into play. feh is just another software for setting wallpapers btw. do sudo apt install feh and you should be good to go for debian based systems, or any other package managers you use idk
     if command -v feh &> /dev/null; then
         feh --bg-fill "$1"
-        echo "Set wallpaper with feh"
         return 0
     fi
 
